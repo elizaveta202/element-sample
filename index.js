@@ -51,12 +51,9 @@ function query(collection) {
 
     select_fields = intersect(...select_fields);
     console.log("select_fields", select_fields);
-    // console.log("select_fields_after_intersection", intersect(...select_fields));
-
-    // console.log("filter_fields", filter_fields);
 
     filter_fields.forEach(function(value, key) {
-        // console.log(key + ' = ' + value);
+
         let intersect_filter_fields = intersect(...value);
         filter_fields.set(key, intersect_filter_fields);
     });
@@ -67,12 +64,11 @@ function query(collection) {
     collection.forEach(function(element) {
         let check = 1;
         filter_fields.forEach(function(value, key) {
-            // console.log("check!!!", key);
+
             if (element.hasOwnProperty(key)) {
-                // console.log("check1");
+
                     if (value.indexOf(element[key]) == -1) {
-                        // result_collection.splice(result_collection.indexOf(element), 1);
-                        console.log("check", element[key]);
+
                         check = 0;
                     }
             }
@@ -82,7 +78,18 @@ function query(collection) {
         }
     });
 
-    console.log("resuuuuult", result_collection);
+    result_collection.forEach(function(element) {
+
+        Object.keys(element).forEach(function(key){
+            if (select_fields.indexOf(key) == -1){
+                delete element[key];
+            }
+
+        });
+
+    });
+    console.log("resssssuuult", result_collection);
+
 }
 
 /**
