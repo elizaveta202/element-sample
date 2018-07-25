@@ -14,6 +14,9 @@ function  check_params(obj, sample){
     return valid_fields;
 }
 
+const intersect2 = (xs,ys) => xs.filter(x => ys.some(y => y === x));
+const intersect = (xs,ys,...rest) => ys === undefined ? xs : intersect(intersect2(xs,ys),...rest);
+
 function query(collection) {
 let result_collection = collection;
   if (arguments.length == 1){
@@ -44,7 +47,19 @@ let result_collection = collection;
             }
         }
     }
+
+    select_fields = intersect(...select_fields);
     console.log("select_fields", select_fields);
+    // console.log("select_fields_after_intersection", intersect(...select_fields));
+
+    // console.log("filter_fields", filter_fields);
+
+    filter_fields.forEach(function(value, key) {
+        // console.log(key + ' = ' + value);
+        intersect_filter_fields = intersect(...value);
+        filter_fields.set(key, intersect_filter_fields);
+    });
+
     console.log("filter_fields", filter_fields);
 }
 
